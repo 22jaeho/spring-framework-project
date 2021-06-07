@@ -1,0 +1,140 @@
+
+-- ***** group table *****
+
+drop table group_table;
+
+create sequence seq_group 
+    increment by 1
+    start with 0
+    maxvalue 9999999
+    minvalue 0;
+
+create table group_table (
+    g_no NUMBER(4) primary key,
+    g_title varchar2(20) not null,
+    g_intro varchar2(200) not null,
+    g_content varchar2(2000) not null, 
+    g_loc varchar2(20) not null,
+    g_img_src varchar2(1000),
+    g_thumb_src varchar2(1000),
+    g_member_cnt NUMBER(2) default 0,
+    g_user_id varchar2(50) not null, 
+    g_member_id varchar2(2000),
+    g_date date default sysdate
+    );
+
+insert into group_table (g_no,g_title,g_intro,g_content,g_loc, g_user_id)
+values(seq_group.nextval,'서핑','서핑서핑','서핑너무조아 짱재밌어용 양양에서 만나요','서울 강서구','user00');
+
+insert into group_table (g_no,g_title,g_intro,g_content,g_loc, g_user_id)
+values(seq_group.nextval,'산책','산책을 좋아하는 개들','개산책하실분?','서울 양천구','user01');
+
+insert into group_table (g_no,g_title,g_intro,g_content,g_loc, g_user_id)
+values(seq_group.nextval,'카페','카페카페','카페입니다.','서울 영등포구','user01');
+
+insert into group_table (g_no,g_title,g_intro,g_content,g_loc, g_user_id)
+values(seq_group.nextval,'한강','한강카페','한강입니다.','서울 마포구','aQy5XS8-sAiUyZdCy2tjbrHiFqGnOc8sTEtV3R_F3_Q');
+
+insert into group_table (g_no,g_title,g_intro,g_content,g_loc, g_user_id)
+values(seq_group.nextval,'콘서트','콘서트가자','아이유입니다.','서울 영등포구','aQy5XS8-sAiUyZdCy2tjbrHiFqGnOc8sTEtV3R_F3_Q');
+
+insert into group_table (g_no,g_title,g_intro,g_content,g_loc, g_user_id)
+values(seq_group.nextval,'맥주','맥주맥주','치맥입니다.','서울 금천구','aQy5XS8-sAiUyZdCy2tjbrHiFqGnOc8sTEtV3R_F3_Q');
+
+insert into group_table (g_no,g_title,g_intro,g_content,g_loc, g_user_id)
+values(seq_group.nextval,'고기','삼겹살','삼쏘입니다.','서울 마포구','user02');
+
+insert into group_table (g_no,g_title,g_intro,g_content,g_loc, g_user_id)
+values(seq_group.nextval,'test','testtest','test!!!','서울 강서구','user03');
+
+
+update group_table 
+set g_member_id = g_member_id || ',' || 'aQy5XS8-sAiUyZdCy2tjbrHiFqGnOc8sTEtV3R_F3_Q',
+    g_member_cnt = g_member_cnt + 1
+where g_no=86;
+
+update group_table
+set g_thumb_src = ''
+where g_thumb_src = '\imgUpload\2021\05\24\s\s_D:\spring\Project\src\main\webapp\resources\images\none.png';
+
+alter table group_table add (g_thumb_src varchar2(1000));
+
+
+select * from group_table order by g_member_cnt desc;
+
+select /*+ index_desc(group_table) */ * from group_table;
+
+commit;
+
+-- 선우 아이디: aQy5XS8-sAiUyZdCy2tjbrHiFqGnOc8sTEtV3R_F3_Q
+
+-- ***** board table *****
+
+create sequence seq_board
+    increment by 1
+    start with 0
+    maxvalue 9999999
+    minvalue 0;
+
+create table board_table(
+    b_no NUMBER(4) primary key,
+    b_title varchar2(40) not null,
+    b_content varchar2(2000) not null, 
+    b_user_id varchar2(50) not null, 
+    b_date date default sysdate
+    );
+
+insert into board_table(b_no, b_title, b_content, b_user_id) 
+values(seq_board.nextval, '게시글제목','게시글내용ㅇㅇㅇㅇ','user00');
+
+alter table board_table modify (b_user_id varchar2(50));
+
+select * from board_table;
+
+select /*+ index_desc(board_table) */ * from board_table;
+
+-- ***** comment table *****
+
+create sequence seq_comment 
+    increment by 1
+    start with 0
+    maxvalue 9999999
+    minvalue 0;
+    
+create table comment_table(
+    c_no number(4) primary key,
+    c_user_id varchar2(50) not null, 
+    b_no number(4) not null,
+    c_content varchar2(200) not null,
+    c_date date default sysdate
+    );
+    
+drop table comment_table;
+alter table comment_table rename column c_board_no to b_no;
+
+insert into comment_table(c_no, c_user_id, b_no, c_content)
+values(seq_comment.nextval, 'user00', 2, 'comment');
+
+select /*+ index_desc(comment_table) */ * from comment_table;
+where b_no = 2;
+
+
+select * from comment_table c left outer join board_table b
+on c.b_no = b.b_no
+where b.b_no = #{board.b_no};
+
+-- ***** user table *****
+
+create table user_table (
+    u_id varchar2(20) primary key,
+    u_name varchar2(20) not null,
+    u_gender varchar2(3) not null,
+    u_age number(2) not null
+    );
+
+insert into user_table values('aaa', '임선우','여',24);
+insert into user_table values('bbb', '이재호','남',26);
+insert into user_table values('ccc', '양재모','남',25);
+insert into user_table values('ddd', '박재경','여',30);
+
+select * from user_table;
