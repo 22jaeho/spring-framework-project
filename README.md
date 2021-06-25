@@ -8,9 +8,7 @@
   * HTML5 & CSS3 & JavaScript
   * Spring Framework & STS
   * Oracle & Apache Tomcat9.0
-  
-### 프로젝트 영상
-https://youtu.be/18M5yIM6ooI
+
 
 
 ### 수상
